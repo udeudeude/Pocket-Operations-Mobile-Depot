@@ -15,13 +15,14 @@
   <div class="app">
     <header class="header">
       <div class="brand"><div class="brand-icon" aria-hidden="true">35<span>↔</span></div><div><p class="eyebrow">Pocket Operator utility</p><h1>PO-35 Bridge</h1></div></div>
-      <span class="version">v0.1 · EXPERIMENTAL</span>
+      <span class="version">v0.2 · EXPERIMENTAL</span>
     </header>
     <section class="intro">A local-first WAV transfer desk for the <strong>PO-35 Speak</strong>. No cloud upload, no account, no audio compression.</section>
     <nav class="tabs" aria-label="Sections">
       <button type="button" class="tab active" data-tab="load" aria-selected="true">↗ Load</button>
       <button type="button" class="tab" data-tab="save" aria-selected="false">↙ Save</button>
       <button type="button" class="tab" data-tab="library" aria-selected="false">▤ Library</button>
+      <button type="button" class="tab" data-tab="research" aria-selected="false">⚗ Research</button>
       <button type="button" class="tab" data-tab="info" aria-selected="false">ⓘ Setup</button>
     </nav>
     <main>
@@ -59,8 +60,45 @@
         <div id="libraryList" class="library-list"></div>
         <p class="subtle">Offline storage can be cleared by Safari or its settings. The downloadable WAV is your durable copy, not this library.</p>
       </section>
+      <section id="page-research" class="page hidden">
+        <div class="section-heading"><span class="step">04</span><div><h2>Research · controlled backups</h2><p>Inspect three original WAV recordings before decoding the PO-35's data protocol.</p></div></div>
+        <div class="info-panel"><h3>Best recording path for this experiment</h3><p><strong>PO-35 OUT → stereo 3.5 mm cable → 2010 iMac LINE IN → Audacity</strong>. Set Audacity to stereo, record 16-bit PCM WAV at 44.1 kHz or higher (24-bit is also fine). Turn off processing, enhancement, normalization, and automatic gain. Do not resample or trim the exported file.</p></div>
+        <div class="warning">This tool is a <strong>WAV integrity and signal inspector</strong>, not a PO-35 protocol decoder. File hashes prove byte integrity, not that two captures contain the same device data. Keep each original WAV outside the browser.</div>
+        <div class="instructions"><strong>Record in this order</strong><ol>
+          <li><strong>Baseline A:</strong> Record a complete transfer from the PO-35 using <strong>WRITE + SOUND</strong>. Do not change its state.</li>
+          <li><strong>Baseline B:</strong> Record the same state again without pressing other buttons or changing settings.</li>
+          <li><strong>One-step change:</strong> Deliberately toggle just one sequencer step in one pattern; note precisely which pattern, sound, and step. Make a third complete recording. Keep the changed state until all three files are safely exported.</li>
+        </ol></div>
+        <div class="research-slots">
+          <div class="research-slot">
+            <div class="rowline"><strong>A · Unchanged baseline 1</strong><span class="mono" id="researchStatusA">Waiting</span></div>
+            <label class="filepicker compact" for="researchFileA"><span class="filepicker-icon">＋</span><span><strong>Choose first WAV</strong><small>Original Audacity stereo export</small></span></label>
+            <input id="researchFileA" type="file" accept=".wav,.wave,audio/wav,audio/x-wav" hidden>
+            <div id="researchResultA" class="research-result" aria-live="polite">No file selected.</div>
+          </div>
+          <div class="research-slot">
+            <div class="rowline"><strong>B · Unchanged baseline 2</strong><span class="mono" id="researchStatusB">Waiting</span></div>
+            <label class="filepicker compact" for="researchFileB"><span class="filepicker-icon">＋</span><span><strong>Choose second WAV</strong><small>Same state, independent recording</small></span></label>
+            <input id="researchFileB" type="file" accept=".wav,.wave,audio/wav,audio/x-wav" hidden>
+            <div id="researchResultB" class="research-result" aria-live="polite">No file selected.</div>
+          </div>
+          <div class="research-slot">
+            <div class="rowline"><strong>C · Single-step modification</strong><span class="mono" id="researchStatusC">Waiting</span></div>
+            <label class="filepicker compact" for="researchFileC"><span class="filepicker-icon">＋</span><span><strong>Choose third WAV</strong><small>Exactly one deliberate change</small></span></label>
+            <input id="researchFileC" type="file" accept=".wav,.wave,audio/wav,audio/x-wav" hidden>
+            <div id="researchResultC" class="research-result" aria-live="polite">No file selected.</div>
+          </div>
+        </div>
+        <label class="fieldlabel" for="researchChange">Describe the single change</label>
+        <input id="researchChange" class="textinput" type="text" placeholder="e.g. pattern 1, sound 1, step 5: off → on">
+        <label class="fieldlabel" for="researchNotes">Recording setup / additional notes</label>
+        <textarea id="researchNotes" class="textinput" rows="3" placeholder="iMac input settings, PO volume, Audacity version, issues during recording…"></textarea>
+        <button id="researchExport" type="button" class="primary full-width" disabled>Export experiment manifest (.json)</button>
+        <p id="researchSummary" class="status" role="status">Import at least one WAV to inspect its channels, peak, duration, and SHA-256 fingerprint.</p>
+        <p class="subtle">A manifest contains metadata only, not your audio files. Export it and upload the three original WAVs separately for analysis. A mono or suspect file will remain labeled as such; the app never upmixes, alters, or silently repairs your recordings.</p>
+      </section>
       <section id="page-info" class="page hidden">
-        <div class="section-heading"><span class="step">04</span><div><h2>Cables & limitations</h2><p>Check the audio route before trusting a transfer.</p></div></div>
+        <div class="section-heading"><span class="step">05</span><div><h2>Cables & limitations</h2><p>Check the audio route before trusting a transfer.</p></div></div>
         <div class="info-panel"><h3>What that Apple adapter does</h3><p>Its 3.5 mm socket can deliver stereo headphone output. With a compatible CTIA headset splitter, its microphone path carries mono audio. A regular TRS cable plugged directly into the adapter is not a reliable microphone-input connection.</p></div>
         <div class="info-panel"><h3>What the browser does</h3><p>Playback uses the original selected WAV file rather than re-encoding to MP3 or AAC. Capture requests echo cancellation, noise suppression and automatic gain control OFF, but iOS may ignore those requests. Recording writes a 16-bit PCM WAV at the actual Web Audio sample rate.</p></div>
         <div class="info-panel"><h3>About full backup reliability</h3><p>Teenage Engineering specifies stereo 16-bit/44.1 kHz or higher for full PO-35 backups. Stereo input generally requires another recording interface. Mono headset capture here is a diagnostic experiment, not a verified preservation workflow.</p></div>
@@ -72,5 +110,6 @@
     <footer>Made for wired transfer · Local-only · No analytics</footer>
   </div>
   <script src="app.js" defer></script>
+  <script src="research.js" defer></script>
 </body>
 </html>
