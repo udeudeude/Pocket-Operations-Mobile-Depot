@@ -82,6 +82,8 @@ async function refreshLibrary(){
 function status(message,error=false){$("recordStatus").textContent=message;$("recordStatus").classList.toggle("error",error)}
 function chunk(blocks){
  if(!recorder||!blocks||!blocks.length||!blocks[0].length)return;
+ // Web Audio may upmix a mono microphone to two channels; never label that as true stereo.
+ if(recorder.settings?.channelCount===1)blocks=blocks.slice(0,1);
  if(!channels)channels=Math.min(2,blocks.length);
  if(blocks.length!==channels)return;
  chunks.push(blocks.map(arr=>new Float32Array(arr)));
