@@ -68,3 +68,20 @@ a{color:var(--accent)}
 :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media(max-width:420px){.header{padding-top:22px}.version{font-size:9px}.brand-icon{width:53px;height:53px}.tab{font-size:13px}.cable{padding:11px 8px;font-size:11px}.connector{font-size:10px}.section-heading h2{font-size:21px}}
 @media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#edf2f1;--surface:#fff;--surface2:#e6f0ef;--border:#c0d2d0;--text:#192c30;--muted:#506567;--accent:#0e6a75;--danger:#a63c3b}body{background:var(--bg)}.tab.active,.primary,.danger{color:white}.warning{background:#fff3e4;color:#614120;border-color:#c79d6f}}
+
+/* Forensic WAV research */
+.tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:420px){.tab{font-size:12px;padding:11px 2px}}
+.research-slots{display:grid;gap:12px;margin:20px 0}
+.research-slot{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px}
+.research-slot .rowline strong{font-size:14px}
+.filepicker.compact{padding:11px 13px;margin:12px 0}
+.filepicker.compact .filepicker-icon{width:32px;min-width:32px;height:32px;font-size:20px}
+.filepicker.compact strong{font-size:13px}
+.research-result{font:12px/1.6 ui-monospace,SFMono-Regular,monospace;color:var(--muted);overflow-wrap:anywhere;white-space:pre-line}
+.research-result .good{color:var(--accent)}
+.research-result .caution{color:#eead77}
+.fieldlabel{font-size:13px;font-weight:700;color:var(--text);display:block;margin:16px 0 6px}
+.textinput{width:100%;font:14px system-ui;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;resize:vertical}
+.textinput::placeholder{color:var(--muted);opacity:.8}
+.full-width{width:100%;margin-top:20px}
